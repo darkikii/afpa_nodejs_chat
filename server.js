@@ -1,36 +1,25 @@
-var http = require('http');
-var fs = require('fs');
+var app = require('express')(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server);// Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
 
-// Chargement du fichier index.html affiché au client
-var server = http.createServer(function(req, res) {
-    fs.readFile('./views/index.html', 'utf-8', function(error, content) {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        res.end(content);
-    });
+// Chargement de la page index.html
+app.get('/', function (req, res) {
+  res.sendfile('./views/index.html');
 });
 
-// Chargement de socket.io (npm install socket.io)
-var io = require('socket.io').listen(server);
-
-// Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
-    // Dès qu'on nous donne un pseudo, on le stocke en variable de session
-    socket.on('petit_nouveau', function(pseudo) {
+    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
+    socket.on('nouveau_client', function(pseudo) {
         socket.pseudo = pseudo;
-        socket.messages = socket.messages + '\n' + socket.pseudo + ' est connecté !';
-        console.log(socket.messages);
-        socket.emit('message', socket.messages);
-        socket.broadcast.emit('message', socket.messages);
+        socket.emit('message', 'vous êtes bien connecté.');
+        socket.broadcast.emit('message', pseudo + ' vient de se connecter.');
     });
 
-    // Quand le serveur reçoit un signal de type "message" du client    
+    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
     socket.on('message', function (message) {
-        console.log(message);
-        socket.emit('message', message);
-        socket.broadcast.emit('message', message);
-    });
-
-});/*fin de io.sockets*/
-
+        socket.emit('message', socket.pseudo +': ' + message);
+        socket.broadcast.emit('message', socket.pseudo +': ' + message);
+    }); 
+});
 
 server.listen(8080);

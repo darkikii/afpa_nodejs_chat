@@ -8,16 +8,16 @@
     <body>
         <h1>Le super Chat en temps réel !</h1>
 
-        <form action="/" method="post">
+        <form  method="post">
             <p>
                 <input type="text" name="message" id="messageNew" placeholder="Votre message" autofocus />
                 <input type="submit" value="Envoyer" id="messageValid"/>
             </p>
         </form>
 
-        <p class="chat">
+        <div class="chat">
             
-        </p>
+        </div>
     
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script><!-- pour que le client recupere socket io -->
@@ -26,16 +26,19 @@
 
             var pseudo = prompt('Quel est votre pseudo ?');
             // Et on l'envoie avec le signal "petit_nouveau" 
-            socket.emit('petit_nouveau', pseudo);
+            socket.emit('nouveau_client', pseudo);
+            
             
             /*envoie un message au server par clic du bouton*/
             $('#messageValid').click(function () {
                 socket.emit('message', messageNew.value);
+                $('#messageNew').val(' ').focus();/*vide le champ + focus*/
+                return false;/*pour bloquer l'envoie du formulaire */
             })
 
             /*on ecoute les messages de type message*/
             socket.on('message', function(message) {
-                $('.chat').text(message);
+                $('.chat').prepend('<p>'+ message + '</p>');              
             })
         </script>
     </body>
