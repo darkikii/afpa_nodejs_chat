@@ -8,37 +8,42 @@
     <body>
         <h1>Le super Chat en temps réel !</h1>
 
-        <form  method="post">
+        <!-- <form  action="/connect"   method="post">
             <p>
-                <input type="text" name="message" id="messageNew" placeholder="Votre message" autofocus />
-                <input type="submit" value="Envoyer" id="messageValid"/>
+                <input type="text" name="mail" id="mail" placeholder="Votre mail" autofocus />
+                <input type="password" name="password" id="password" placeholder="Votre mot de passe" autofocus />
+                <input type="submit" value="Connexion" id="connexionValid"/>
+            </p>
+        </form> -->
+
+        <form  action="/insc" method="post">
+            <p>
+                <input type="text" name="mailmailInscription" id="mailInscription" placeholder="Votre mail" autofocus />
+                <input type="password" name="passwordInscription" id="passwordInscription" placeholder="Votre mot de passe" autofocus />
+                <input type="submit" value="Inscription" id="inscriptionValid"/>
             </p>
         </form>
-
-        <div class="chat">
-            
-        </div>
     
+        <div class="message"></div>
+
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script><!-- pour que le client recupere socket io -->
         <script>
             var socket = io.connect('http://localhost:8080'); /*connection au serveur*/
 
-            var pseudo = prompt('Quel est votre pseudo ?');
+            /*var pseudo = prompt('Quel est votre pseudo ?');
             // Et on l'envoie avec le signal "petit_nouveau" 
-            socket.emit('nouveau_client', pseudo);
+            socket.emit('nouveau_client', pseudo);*/
             
             
             /*envoie un message au server par clic du bouton*/
-            $('#messageValid').click(function () {
-                socket.emit('message', messageNew.value);
-                $('#messageNew').val(' ').focus();/*vide le champ + focus*/
-                return false;/*pour bloquer l'envoie du formulaire */
-            })
+            /*$('#inscriptionValid').click(function () {
+                socket.emit('inscription', messageNew.value);
+            })*/
 
             /*on ecoute les messages de type message*/
             socket.on('message', function(message) {
-                $('.chat').prepend('<p>'+ message + '</p>');              
+                $('.message').prepend('<p>'+ message + '</p>');              
             })
         </script>
     </body>

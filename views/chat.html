@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Mon Chat à moi</title>
+    </head>
+ 
+    <body>
+        <h1>Le super Chat en temps réel !</h1>
+
+        <form>
+            <p>
+                <input type="text" name="message" id="messageNew" placeholder="Votre message" autofocus />
+                <input type="submit" value="Envoyer" id="messageValid"/>
+            </p>
+        </form>
+
+        <div class="chat">
+            
+        </div>
+    
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script><!-- pour que le client recupere socket io -->
+        <script>
+            var socket = io.connect('http://localhost:8080'); /*connection au serveur*/
+
+            /*envoie un message au server par clic du bouton*/
+            $('#messageValid').click(function () {
+                socket.emit('message', messageNew.value);
+                $('#messageNew').val(' ').focus();/*vide le champ + focus*/
+                return false;/*pour bloquer l'envoie du formulaire */
+            })
+
+            /*on ecoute les messages de type message*/
+            socket.on('message', function(message) {
+                $('.chat').prepend('<p>'+ message + '</p>');              
+            })
+        </script>
+    </body>
+</html>
