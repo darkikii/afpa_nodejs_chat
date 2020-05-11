@@ -23,6 +23,28 @@
         <script src="/socket.io/socket.io.js"></script><!-- pour que le client recupere socket io -->
         <script>
             var socket = io.connect('http://localhost:8080'); /*connection au serveur*/
+            
+            /*lecture des cookies*/
+            var allcookies = document.cookie;
+       
+            // met tout les cookies dans un tableau
+            cookiearray = allcookies.split(';');
+       
+            // verifie chaque cookie
+            for(var i=0; i<cookiearray.length; i++) {
+                name = cookiearray[i].split('=')[0];
+                if(name === "pseudo"){
+                  pseudo = cookiearray[i].split('=')[1];
+                }/*fin de if name*/
+            }/*fin de for*/
+
+            /*envoie du cookie pseudo au server*/
+            var test = 0;/*pour envoyer une seul fois au server*/
+            if(pseudo != '' && test == 0){
+                // Et on l'envoie avec le signal "petit_nouveau" 
+                socket.emit('nouveau_client', pseudo);
+                test++;
+            }           
 
             /*envoie un message au server par clic du bouton*/
             $('#messageValid').click(function () {

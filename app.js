@@ -1,7 +1,6 @@
 const bodyParser = require('body-parser');/*pour extraire le json du formulaire envoyé (npm install --save body-parser)*/
 
 /*a verifier utiliter*/
-const bcrypt = require('bcrypt');/*cryptage (npm install --save bcrypt)*/
 const jwt = require('jsonwebtoken');/*pour les token sert à identifier les user(npm install --save jsonwebtoken)*/
 
 var app = require('express')();
@@ -12,7 +11,6 @@ const chatRoutes = require('./routers/chat');
 
 require('./db/db');
 const Product = require('./models/User');/*notre class */
-const fonction = require('./fonction');
 
 /*pour le CORES*/
 app.use((req, res, next) => {

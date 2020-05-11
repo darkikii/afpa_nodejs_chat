@@ -1,6 +1,6 @@
 const http = require('http'); /*appel de http*/
 const app = require('./app'); /*appel de notre appli*/
-var date = require('./fonction');
+require('./js/function');
 
 /*renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne */
 const normalizePort = val => {
@@ -56,8 +56,6 @@ io.sockets.on('connection', function (socket) {
         socket.emit('message', 'vous êtes bien inscrit.');
     });*/
 
-
-
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('nouveau_client', function(pseudo) {
         socket.pseudo = pseudo;
@@ -67,7 +65,7 @@ io.sockets.on('connection', function (socket) {
 
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
     socket.on('message', function (message) {
-        var time = date.dateFr;
+        var time = dateFr();
         socket.emit('message', time + ' ' + socket.pseudo +': ' + message);
         socket.broadcast.emit('message', time + ' ' + socket.pseudo +': ' + message);
     }); 
@@ -76,4 +74,4 @@ io.sockets.on('connection', function (socket) {
 
 
 /*ecoute le serveur*/
-server.listen(process.env.PORT || 8080);/*port par defaut ou 3000*/
+server.listen(process.env.PORT || 8080);/*port par defaut ou 8080*/
