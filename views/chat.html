@@ -39,22 +39,22 @@
             }/*fin de for*/
 
             /*envoie du cookie pseudo au server*/
-            var test = 0;/*pour envoyer une seul fois au server*/
+            var test = 0;/*pour envoyer une seule fois au server*/
             if(pseudo != '' && test == 0){
-                // Et on l'envoie avec le signal "petit_nouveau" 
+                // Et on l'envoie avec le signal "nouveau_client" 
                 socket.emit('nouveau_client', pseudo);
                 test++;
             }           
 
             /*envoie un message au server par clic du bouton*/
-            $('#messageValid').click(function () {
+            $('#messageValid').click(function () {console.log('envoie');
                 socket.emit('message', messageNew.value);
                 $('#messageNew').val(' ').focus();/*vide le champ + focus*/
                 return false;/*pour bloquer l'envoie du formulaire */
             })
 
             /*on ecoute les messages de type message*/
-            socket.on('message', function(message) {
+            socket.on('message', function(message) {console.log('test');
                 $('.chat').prepend('<p>'+ message + '</p>');              
             })
         </script>

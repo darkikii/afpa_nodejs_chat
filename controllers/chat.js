@@ -13,6 +13,11 @@ exports.chat = (req, res, next) => {
   res.sendFile(path.resolve('views/chat.html'));
 };
 
+exports.vueInscr = (req, res, next) => {
+  res.sendFile(path.resolve('views/inscription.html'));
+};
+
+
 /*inscription utilisateur*/
 exports.inscr = (req, res, next) => {
   if(req.body.password != req.body.password2){
@@ -27,8 +32,8 @@ exports.inscr = (req, res, next) => {
             password: hash
           });/*fin de creation user*/
           user.save()
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
+            .then(() => res.status(200).json({ message: 'Utilisateur créé !' }))
+            .catch(() => res.status(201).json({ message: 'email est déjà utilisé' }));/*si on met status 400 ne fonctionne pas*/
         })/*fin de then hash*/
         .catch(error => res.status(500).json({ error }));
   }/*fin de if else*/
