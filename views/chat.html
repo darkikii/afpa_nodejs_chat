@@ -47,14 +47,14 @@
             }           
 
             /*envoie un message au server par clic du bouton*/
-            $('#messageValid').click(function () {console.log('envoie');
+            $('#messageValid').click(function () {
                 socket.emit('message', messageNew.value);
                 $('#messageNew').val(' ').focus();/*vide le champ + focus*/
                 return false;/*pour bloquer l'envoie du formulaire */
             })
 
             /*on ecoute les messages de type message*/
-            socket.on('message', function(message) {console.log('test');
+            socket.on('message', function(message) {
                 $('.chat').prepend('<p>'+ message + '</p>');              
             })
         </script>

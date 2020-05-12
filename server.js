@@ -1,5 +1,6 @@
 const http = require('http'); /*appel de http*/
 const app = require('./app'); /*appel de notre appli*/
+var ent = require('ent');/*permet de retirer le code html des form*/
 require('./js/function');
 
 /*renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne */
@@ -52,26 +53,21 @@ server.on('listening', () => {
 /*server io*/
 io.sockets.on('connection', function (socket) {
 
-    /*socket.on('inscription', function() {
-        socket.emit('message', 'vous êtes bien inscrit.');
-    });*/
-
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('nouveau_client', function(pseudo) {
-        socket.pseudo = pseudo;
+        socket.pseudo = ent.encode(pseudo);
         socket.emit('message', 'vous êtes bien connecté.');
         socket.broadcast.emit('message', pseudo + ' vient de se connecter.');
     });
 
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
-    socket.on('message', function (message) {console.log('server');
+    socket.on('message', function (message) {
         var time = dateFr();
+        message = ent.encode(message);
         socket.emit('message', time + ' ' + socket.pseudo +': ' + message);
         socket.broadcast.emit('message', time + ' ' + socket.pseudo +': ' + message);
     }); 
 });
-
-
 
 /*ecoute le serveur*/
 server.listen(process.env.PORT || 8080);/*port par defaut ou 8080*/

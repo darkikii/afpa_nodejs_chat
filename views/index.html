@@ -20,6 +20,9 @@
             Vous inscrire!
             <input type="submit" value="vous inscrire" id="inscription"/>
         </p>
+
+        <div id="erreur"></div>
+
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script><!-- pour que le client recupere socket io -->
 
@@ -37,6 +40,11 @@
                     if(data.message === 'Utilisateur connecté !'){/*si utilisateur autorisé à se connecter renvoie à la page de chat et crée un cookie pseudo*/
                         document.cookie = "pseudo=" + data.pseudo;
                         document.location="http://localhost:8080/chat";
+                    }
+                    else
+                    {
+                        $("#erreur").css({ color: "red"});
+                        $("#erreur").text(data.message);
                     }
                 }, 'json');/*fin de post*/
                 return false; /*pour bloquer le formulaire*/               

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');/*cryptage (npm install --save bcrypt)*/
+var ent = require('ent');
 const User = require('../models/User');
 
 var path = require('path');
@@ -20,15 +21,21 @@ exports.vueInscr = (req, res, next) => {
 
 /*inscription utilisateur*/
 exports.inscr = (req, res, next) => {
-  if(req.body.password != req.body.password2){
+  /*verification des données reçu*/
+  var pseudo = ent.encode(req.body.pseudo);
+  var email = ent.encode(req.body.email);
+  var password = ent.encode(req.body.password);
+  var password2 = ent.encode(req.body.password2);
+
+  if(password != password2){
     res.status(400).json({ message: 'les mots de passes sont différents' });
   }
   else {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(password, 10)
         .then(hash => {
           const user = new User({
-            pseudo: req.body.pseudo,
-            email: req.body.email,
+            pseudo: pseudo,
+            email: email,
             password: hash
           });/*fin de creation user*/
           user.save()
@@ -41,15 +48,19 @@ exports.inscr = (req, res, next) => {
 
 /*connection utilisateur*//*token ne fonctionne pas*/
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })/*lecture bdd*/
+  /*verification des données reçu*/
+  var email = ent.encode(req.body.email);
+  var password = ent.encode(req.body.password);
+
+  User.findOne({ email: email })/*lecture bdd*/
     .then(user => {
       if (!user) {/*si on trouve pas de user*/
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        return res.status(201).json({ message: 'Utilisateur non trouvé !' });
       }
-      bcrypt.compare(req.body.password, user.password)
+      bcrypt.compare(password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
+            return res.status(201).json({ message: 'Mot de passe incorrect !' });
           }
           res.status(200).json({ message: 'Utilisateur connecté !', pseudo: user.pseudo })
           /*res.status(200).json({
