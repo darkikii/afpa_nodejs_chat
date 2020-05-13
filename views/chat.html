@@ -54,8 +54,11 @@
             })
 
             /*on ecoute les messages de type message*/
-            socket.on('message', function(message) {
-                $('.chat').prepend('<p>'+ message + '</p>');              
+            socket.on('message', function(data) {
+                if(data.date === 'NULL'){
+                    $('.chat').prepend('<p>' + '<strong>' + data.pseudo + '</strong>: ' + data.message + '</p>');
+                }
+                else $('.chat').prepend('<p><em>' + data.date + ' </em><strong>' + data.pseudo + '</strong>: ' + data.message + '</p>');              
             })
         </script>
     </body>

@@ -56,16 +56,16 @@ io.sockets.on('connection', function (socket) {
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('nouveau_client', function(pseudo) {
         socket.pseudo = ent.encode(pseudo);
-        socket.emit('message', 'vous êtes bien connecté.');
-        socket.broadcast.emit('message', pseudo + ' vient de se connecter.');
+        socket.emit('message', { pseudo: 'ADMINISTRATEUR', message: 'Vous êtes bien connecté', date: 'NULL' });
+        socket.broadcast.emit('message', { pseudo: socket.pseudo, message: 'vient de se connecter', date: 'NULL' });
     });
 
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
     socket.on('message', function (message) {
         var time = dateFr();
         message = ent.encode(message);
-        socket.emit('message', time + ' ' + socket.pseudo +': ' + message);
-        socket.broadcast.emit('message', time + ' ' + socket.pseudo +': ' + message);
+        socket.emit('message', { pseudo: socket.pseudo, message: message, date: time });
+        socket.broadcast.emit('message', { pseudo: socket.pseudo, message: message, date: time });
     }); 
 });
 
