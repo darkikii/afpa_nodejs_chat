@@ -1,10 +1,10 @@
 const bodyParser = require('body-parser');/*pour extraire le json du formulaire envoyé (npm install --save body-parser)*/
-
+const express = require('express');
 /*a verifier utiliter*/
 const jwt = require('jsonwebtoken');/*pour les token sert à identifier les user(npm install --save jsonwebtoken)*/
 
 var app = require('express')();
-
+app.use('/js', express.static(__dirname + '/js'));
 app.use(bodyParser.json());
 
 const chatRoutes = require('./routers/chat');

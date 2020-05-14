@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const chatCtrl = require('../controllers/chat');
 const bodyParser = require('body-parser');
-
+const app = require('../app');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
