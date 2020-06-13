@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://darkikii:Adeline1014++@cluster0-fjhlh.mongodb.net/monChat?retryWrites=true&w=majority',
+mongoose.connect('',
 	{
 	    useNewUrlParser: true,
 	    useCreateIndex: true,
